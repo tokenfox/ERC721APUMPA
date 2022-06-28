@@ -13,9 +13,4 @@ interface IERC721ALockedReserve {
      * The caller must own corresponding token from locked reserve contract
      */
     error LockedReserveMintNotLockTokenHolder();
-
-    /**
-     * @dev Mint a token from locked reserve
-     */
-    function lockedReserveMint(address to, uint256 tokenId) external;
 }
