@@ -35,7 +35,7 @@ interface ERC721A__IERC721Receiver {
  *
  * Assumes that the maximum token id cannot exceed 2**256 - 1 (max value of uint256).
  */
-contract ERC721A is IERC721A {
+contract ERC721APUMPA is IERC721A {
     error NotQualifiedForUnlock();
 
     // Mask of an entry in packed address data.
