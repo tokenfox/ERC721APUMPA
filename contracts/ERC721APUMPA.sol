@@ -85,7 +85,7 @@ contract ERC721APUMPA is IERC721A, IERC721ALockedReserve {
     // Size of locked reserve
     uint256 private _lockedReserveSize;
 
-    // Address of ERC721 contract for unlocking reserve tokens
+    // ERC721 contract for unlocking locked reserves
     IERC721OwnerCheck private _lockedReserveContract;
 
     // The number of tokens burned.
@@ -711,7 +711,7 @@ contract ERC721APUMPA is IERC721A, IERC721ALockedReserve {
     }
 
     /**
-     * @dev Mint token from locked reserve
+     * @dev Mint a token from locked reserve
      */
     function mintFromLockedReserve(
         address to,

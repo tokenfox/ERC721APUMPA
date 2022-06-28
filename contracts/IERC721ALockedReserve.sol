@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// ERC71A with Token Locked Reserve
+// ERC71A with Locked Reserve
 
 pragma solidity ^0.8.4;
 
