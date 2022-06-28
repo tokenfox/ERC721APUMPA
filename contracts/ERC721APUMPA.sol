@@ -4,6 +4,7 @@
 pragma solidity ^0.8.4;
 
 import './IERC721A.sol';
+import './IERC721ALockedReserve.sol';
 
 /**
  * @dev ERC721 interface for owner check
@@ -35,9 +36,7 @@ interface ERC721A__IERC721Receiver {
  *
  * Assumes that the maximum token id cannot exceed 2**256 - 1 (max value of uint256).
  */
-contract ERC721APUMPA is IERC721A {
-    error NotQualifiedForUnlock();
-
+contract ERC721APUMPA is IERC721A, IERC721ALockedReserve {
     // Mask of an entry in packed address data.
     uint256 private constant BITMASK_ADDRESS_DATA_ENTRY = (1 << 64) - 1;
 
@@ -724,10 +723,10 @@ contract ERC721APUMPA is IERC721A {
 
         if (address(uint160(prevOwnershipPacked)) != from) revert TransferFromIncorrectOwner();
 
-        // `to` address must hold qualifying unlock NFT
-        address owner = _lockedReserveContract.ownerOf(tokenId);
+        // Target address must own corresponding lock token
+        address lockTokenOwner = _lockedReserveContract.ownerOf(tokenId);
 
-        if (owner != to) revert NotQualifiedForUnlock();
+        if (lockTokenOwner != to) revert NotQualifiedForUnlock();
 
         // Must send to non-zero address
         if (to == address(0)) revert TransferToZeroAddress();
