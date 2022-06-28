@@ -5,7 +5,17 @@ pragma solidity ^0.8.4;
 
 interface IERC721ALockedReserve {
     /**
+     * Token must be in the range of reserved locked tokens
+     */
+    error LockedReserveMintTokenOutOfRange();
+
+    /**
      * The caller must own corresponding token from locked reserve contract
      */
-    error NotQualifiedForUnlock();
+    error LockedReserveMintNotLockTokenHolder();
+
+    /**
+     * @dev Mint a token from locked reserve
+     */
+    function lockedReserveMint(address to, uint256 tokenId) external;
 }

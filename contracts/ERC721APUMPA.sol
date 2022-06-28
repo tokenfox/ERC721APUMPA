@@ -713,25 +713,40 @@ contract ERC721APUMPA is IERC721A, IERC721ALockedReserve {
     /**
      * @dev Mint a token from locked reserve
      */
-    function mintFromLockedReserve(
-        address to,
-        uint256 tokenId
-    ) public virtual {
-        // Contract must still hold corresponding token
+    function lockedReserveMint(address to, uint256 tokenId) public virtual {
+        // Token must be in the range of reserved locked tokens
+        if (tokenId < _startTokenId() || tokenId >= _startTokenId() + _lockedReserveSize) {
+            revert LockedReserveMintTokenOutOfRange();
+        }
+
+        // Reserve contract must hold corresponding token
         address from = address(this);
         uint256 prevOwnershipPacked = _packedOwnershipOf(tokenId);
 
         if (address(uint160(prevOwnershipPacked)) != from) revert TransferFromIncorrectOwner();
 
-        // Target address must own corresponding lock token
+        // Sender must own corresponding lock token
         address lockTokenOwner = _lockedReserveContract.ownerOf(tokenId);
 
-        if (lockTokenOwner != to) revert NotQualifiedForUnlock();
+        if (_msgSenderERC721A() != lockTokenOwner) revert LockedReserveMintNotLockTokenHolder();
+
+        // [JUST IN CASE] Get approvals
+        (uint256 approvedAddressSlot, address approvedAddress) = _getApprovedAddress(tokenId);
+
+        // TODO: approval based minting
 
         // Must send to non-zero address
         if (to == address(0)) revert TransferToZeroAddress();
 
         _beforeTokenTransfers(from, to, tokenId, 1);
+
+        // [JUST IN CASE]  Clear approvals from the previous owner.
+        assembly {
+            if approvedAddress {
+                // This is equivalent to `delete _tokenApprovals[tokenId]`.
+                sstore(approvedAddressSlot, 0)
+            }
+        }
 
         // Underflow of the sender's balance is impossible because we check for
         // ownership above and the recipient's balance can't realistically overflow.
