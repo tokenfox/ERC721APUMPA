@@ -1,4 +1,3 @@
-
 {
   "name": "erc721a",
   "version": "4.1.0",
@@ -16,7 +15,8 @@
     "lint": "npm run lint:js && npm run lint:sol",
     "lint:js": "eslint --ignore-path .gitignore . --fix",
     "lint:sol": "prettier --write \"contracts/**/*.sol\"",
-    "update-version": "scripts/release/update-version.js"
+    "update-version": "scripts/release/update-version.js",
+    "prettier": "prettier --write 'contracts/extras/**/*.sol'"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.4",
@@ -30,7 +30,7 @@
     "ethers": "^5.5.3",
     "hardhat": "^2.8.2",
     "hardhat-gas-reporter": "^1.0.7",
-    "prettier": "^2.5.1",
+    "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solidity-coverage": "^0.7.20"
   },
