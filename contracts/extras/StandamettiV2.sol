@@ -14,9 +14,9 @@ contract Standametti is ERC721, Ownable, RandomlyAssigned {
 
     uint256 public cost = 0.02 ether;
     uint256 internal startTokenId = 1;
-    uint256 internal maxPumpaSupply = 300;
-    uint256 public maxTotalSupply = 310;
-    uint256 public maxPublicSupply = maxTotalSupply - maxPumpaSupply;
+    uint256 internal maxPumpaReservedSupply = 300;
+    uint256 public maxTotalSupply = 4500;
+    uint256 public maxPublicSupply = maxTotalSupply - maxPumpaReservedSupply;
     uint256 internal maxPublicMintAmount = 10;
     string internal baseURI =
         "https://ipfs.io/ipfs/QmZd2RwnapYAtETyyhVGTS9d8rDBvRPE3nvr573ed1QMcX/";
@@ -28,7 +28,7 @@ contract Standametti is ERC721, Ownable, RandomlyAssigned {
 
     constructor()
         ERC721("Standametti", "Standa")
-        RandomlyAssigned(maxPublicSupply, startTokenId + maxPumpaSupply)
+        RandomlyAssigned(maxPublicSupply, startTokenId + maxPumpaReservedSupply)
     {}
 
     function _baseURI() internal view virtual override returns (string memory) {
@@ -37,7 +37,7 @@ contract Standametti is ERC721, Ownable, RandomlyAssigned {
 
     function PumpaFirstChoiceVIPMint(uint256 pumpaId) public payable {
         require(pumpaId >= startTokenId);
-        require(pumpaId <= startTokenId + maxPumpaSupply);
+        require(pumpaId <= startTokenId + maxPumpaReservedSupply);
         require(
             pumpaContract.ownerOf(pumpaId) == msg.sender,
             "Not the owner of this pumpametti"
