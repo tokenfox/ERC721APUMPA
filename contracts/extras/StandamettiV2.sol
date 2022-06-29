@@ -16,7 +16,7 @@ contract Standametti is ERC721, Ownable, RandomlyAssigned {
     uint256 internal startTokenId = 1;
     uint256 internal maxPumpaReservedSupply = 300;
     uint256 public maxTotalSupply = 4500;
-    uint256 public maxPublicSupply = maxTotalSupply - maxPumpaReservedSupply;
+    uint256 public publicSupplyLeft = maxTotalSupply - maxPumpaReservedSupply;
     uint256 internal maxPublicMintAmount = 10;
     string internal baseURI =
         "https://ipfs.io/ipfs/QmZd2RwnapYAtETyyhVGTS9d8rDBvRPE3nvr573ed1QMcX/";
@@ -24,11 +24,15 @@ contract Standametti is ERC721, Ownable, RandomlyAssigned {
     // Allow OG Pumpametti holders to mint for free
     address internal pumpaAddress = 0x09646c5c1e42ede848A57d6542382C32f2877164;
     IPumpaOwnerCheck internal pumpaContract = IPumpaOwnerCheck(pumpaAddress);
-    uint256 public publicSupplyMinted = 0;
 
     constructor()
         ERC721("Standametti", "Standa")
-        RandomlyAssigned(maxPublicSupply, startTokenId + maxPumpaReservedSupply)
+        RandomlyAssigned(
+            // Total number of tokens to be randomly assigned
+            maxTotalSupply - maxPumpaReservedSupply,
+            // Id of first randomly assigned token
+            startTokenId + maxPumpaReservedSupply
+        )
     {}
 
     function _baseURI() internal view virtual override returns (string memory) {
@@ -54,11 +58,11 @@ contract Standametti is ERC721, Ownable, RandomlyAssigned {
         );
         require(totalSupply() + _mintAmount <= maxTotalSupply);
         require(
-            publicSupplyMinted + _mintAmount <= maxPublicSupply,
+            publicSupplyLeft - _mintAmount >= 0,
             "No more public supply left"
         );
         require(msg.value >= cost * _mintAmount);
-        publicSupplyMinted = publicSupplyMinted + _mintAmount;
+        publicSupplyLeft = publicSupplyLeft - _mintAmount;
 
         for (uint256 i = 0; i < _mintAmount; ++i) {
             uint256 tokenId = nextToken();
