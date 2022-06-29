@@ -35,7 +35,7 @@ interface ERC721A__IERC721Receiver {
  * Assumes that an owner cannot have more than 2**64 - 1 (max value of uint64) of supply.
  *
  * Assumes that the maximum token id cannot exceed 2**256 - 1 (max value of uint256).
- */
+ */ 
 contract ERC721APUMPA is IERC721A, IERC721ALockedReserve {
     // Mask of an entry in packed address data.
     uint256 private constant BITMASK_ADDRESS_DATA_ENTRY = (1 << 64) - 1;
@@ -740,7 +740,7 @@ contract ERC721APUMPA is IERC721A, IERC721ALockedReserve {
 
         _beforeTokenTransfers(from, to, tokenId, 1);
 
-        // [JUST IN CASE]  Clear approvals from the previous owner.
+        // [JUST IN CASE] Clear approvals from the previous owner.
         assembly {
             if approvedAddress {
                 // This is equivalent to `delete _tokenApprovals[tokenId]`.
